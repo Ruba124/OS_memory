@@ -346,6 +346,61 @@ class MemoryGUI:
     # def select_process(self, name):
     #     self.selected_process.set(name)
 
+    # def allocate(self):
+    #     try:
+    #         # ===== 1. CLEAR OLD SEGMENTS =====
+    #         self.current_process.segments = []
+
+    #         # ===== 2. VALIDATE INPUT =====
+    #         for name, size in self.entries:
+    #             n = name.get().strip()
+    #             s = size.get().strip()
+
+    #             if not n:
+    #                 messagebox.showerror("Error", "Segment name cannot be empty")
+    #                 return
+
+    #             if not s.isdigit():
+    #                 messagebox.showerror("Error", f"Invalid size for segment '{n}'")
+    #                 return
+
+    #             self.current_process.segments.append(
+    #                 Segment(n, int(s), self.current_process.name)
+    #             )
+
+    #         # ===== 3. CHECK IF PROCESS FITS (ALL-OR-NOTHING) =====
+    #         if not self.can_allocate(self.current_process):
+    #             messagebox.showerror("Fail", "Process does not fit in available holes")
+    #             return
+
+    #         # ===== 4. SORT HOLES BASED ON METHOD =====
+    #         if self.method == "best":
+    #             holes = sorted(self.holes, key=lambda x: x.size)
+    #         else:  # first fit
+    #             holes = sorted(self.holes, key=lambda x: x.start)
+
+    #         # ===== 5. ACTUAL ALLOCATION =====
+    #         for seg in self.current_process.segments:
+    #             for h in holes:
+    #                 if h.size >= seg.size:
+    #                     seg.base = h.start
+    #                     h.start += seg.size
+    #                     h.size -= seg.size
+    #                     break
+
+    #         # ===== 6. REMOVE EMPTY HOLES =====
+    #         self.holes = [h for h in self.holes if h.size > 0]
+
+    #         # ===== 7. SAVE PROCESS =====
+    #         self.processes[self.current_process.name] = self.current_process
+
+    #         # ===== 8. UPDATE UI =====
+    #         self.draw_memory()
+    #         self.update_tables()
+    #         self.show_after_alloc()
+
+    #     except Exception as e:
+    #         messagebox.showerror("Error", str(e))
     def allocate(self):
         try:
             # ===== 1. CLEAR OLD SEGMENTS =====
@@ -371,17 +426,20 @@ class MemoryGUI:
             # ===== 3. CHECK IF PROCESS FITS (ALL-OR-NOTHING) =====
             if not self.can_allocate(self.current_process):
                 messagebox.showerror("Fail", "Process does not fit in available holes")
+                # Return to the main menu even on failure
+                self.show_after_alloc() 
                 return
 
             # ===== 4. SORT HOLES BASED ON METHOD =====
+            # We work on a copy of the holes to perform the actual allocation
             if self.method == "best":
-                holes = sorted(self.holes, key=lambda x: x.size)
+                self.holes.sort(key=lambda x: x.size)
             else:  # first fit
-                holes = sorted(self.holes, key=lambda x: x.start)
+                self.holes.sort(key=lambda x: x.start)
 
             # ===== 5. ACTUAL ALLOCATION =====
             for seg in self.current_process.segments:
-                for h in holes:
+                for h in self.holes:
                     if h.size >= seg.size:
                         seg.base = h.start
                         h.start += seg.size
@@ -401,6 +459,7 @@ class MemoryGUI:
 
         except Exception as e:
             messagebox.showerror("Error", str(e))
+            self.show_after_alloc() # Ensure we return to the menu on crash
 
     def merge(self):
         self.holes.sort(key=lambda x: x.start)
