@@ -56,12 +56,48 @@ class MemoryGUI:
 
         self.show_memory_input()
 
+    # def show_memory_input(self):
+    #     self.clear_left()
+    #     tk.Label(self.left, text="Enter Memory Size", fg="white", bg="#111827").pack(pady=10)
+    #     self.mem_entry = tk.Entry(self.left)
+    #     self.mem_entry.pack()
+    #     tk.Button(self.left, text="Next", command=self.set_memory, bg="#22c55e", fg="white").pack(pady=10)
     def show_memory_input(self):
         self.clear_left()
-        tk.Label(self.left, text="Enter Memory Size", fg="white", bg="#111827").pack(pady=10)
-        self.mem_entry = tk.Entry(self.left)
-        self.mem_entry.pack()
-        tk.Button(self.left, text="Next", command=self.set_memory, bg="#22c55e", fg="white").pack(pady=10)
+        
+        # 1. Title: "not too up" - give it a top margin of 40-50
+        tk.Label(
+            self.left, 
+            text="Memory Allocation Project", 
+            fg="#22c55e", 
+            bg="#111827", 
+            font=("Arial", 14, "bold")
+        ).pack(pady=(50, 10)) # (50 pixels above, 10 pixels below)
+
+        # 2. Input Label: To move it down towards the middle, 
+        # use a larger top value in pady. 
+        # Adjust 150 to your liking (increase for lower, decrease for higher)
+        tk.Label(
+            self.left, 
+            text="Enter Memory Size", 
+            fg="white", 
+            bg="#111827"
+        ).pack(pady=(150, 5)) 
+
+        # 3. Entry Field: Add internal padding (ipady) to make it taller/bigger
+        self.mem_entry = tk.Entry(self.left, font=("Arial", 12), width=20)
+        self.mem_entry.pack(ipady=8, pady=10)
+
+        # 4. Button
+        tk.Button(
+            self.left, 
+            text="Next", 
+            command=self.set_memory, 
+            bg="#22c55e", 
+            fg="white",
+            width=15,
+            height=2
+        ).pack(pady=20)
 
     def set_memory(self):
         try:
@@ -71,21 +107,39 @@ class MemoryGUI:
         except:
             messagebox.showerror("Error", "Invalid memory size")
 
+    # def show_hole_input(self):
+    #     self.clear_left()
+
+    #     tk.Label(self.left, text="Add Holes", fg="white", bg="#111827", font=("Arial", 12, "bold")).pack(pady=10)
+
+    #     tk.Label(self.left, text="Start Address", fg="white", bg="#111827").pack()
+    #     self.h_start = tk.Entry(self.left)
+    #     self.h_start.pack(pady=3)
+
+    #     tk.Label(self.left, text="Hole Size", fg="white", bg="#111827").pack()
+    #     self.h_size = tk.Entry(self.left)
+    #     self.h_size.pack(pady=3)
+
+    #     tk.Button(self.left, text="➕ Add Hole", command=self.add_hole,
+    #             bg="#3b82f6", fg="white", height=2, width=20).pack(pady=8)
+
+    #     tk.Button(self.left, text="✔ Finish Holes", command=self.finish_holes,
+    #             bg="#22c55e", fg="white", height=2, width=20).pack(pady=5)
     def show_hole_input(self):
         self.clear_left()
-
-        tk.Label(self.left, text="Add Holes", fg="white", bg="#111827", font=("Arial", 12, "bold")).pack(pady=10)
+        # Push down from top
+        tk.Label(self.left, text="Add Holes", fg="white", bg="#111827", font=("Arial", 14, "bold")).pack(pady=(40, 20))
 
         tk.Label(self.left, text="Start Address", fg="white", bg="#111827").pack()
-        self.h_start = tk.Entry(self.left)
-        self.h_start.pack(pady=3)
+        self.h_start = tk.Entry(self.left, font=("Arial", 11), width=25)
+        self.h_start.pack(pady=10, ipady=5) # Increased pady and ipady
 
         tk.Label(self.left, text="Hole Size", fg="white", bg="#111827").pack()
-        self.h_size = tk.Entry(self.left)
-        self.h_size.pack(pady=3)
+        self.h_size = tk.Entry(self.left, font=("Arial", 11), width=25)
+        self.h_size.pack(pady=10, ipady=5)
 
         tk.Button(self.left, text="➕ Add Hole", command=self.add_hole,
-                bg="#3b82f6", fg="white", height=2, width=20).pack(pady=8)
+                bg="#3b82f6", fg="white", height=2, width=20).pack(pady=15)
 
         tk.Button(self.left, text="✔ Finish Holes", command=self.finish_holes,
                 bg="#22c55e", fg="white", height=2, width=20).pack(pady=5)
@@ -116,13 +170,15 @@ class MemoryGUI:
     def show_process_input(self):
         self.clear_left()
 
+        tk.Label(self.left, text="Process Configuration", fg="white", bg="#111827", font=("Arial", 12, "bold")).pack(pady=(30, 10))
+
         tk.Label(self.left, text="Process Name", fg="white", bg="#111827").pack()
-        self.p_name = tk.Entry(self.left)
-        self.p_name.pack(pady=3)
+        self.p_name = tk.Entry(self.left, font=("Arial", 11), width=25)
+        self.p_name.pack(pady=10, ipady=5)
 
         tk.Label(self.left, text="Number of Segments", fg="white", bg="#111827").pack()
-        self.p_seg = tk.Entry(self.left)
-        self.p_seg.pack(pady=3)
+        self.p_seg = tk.Entry(self.left, font=("Arial", 11), width=25)
+        self.p_seg.pack(pady=10, ipady=5)
         if self.first_allocation:
             tk.Label(self.left, text="Choose Allocation Method",
                     fg="white", bg="#111827", font=("Arial", 12, "bold")).pack(pady=10)
@@ -186,51 +242,7 @@ class MemoryGUI:
                 bg="#22c55e", fg="white", height=2, width=20).pack(pady=10)
     
     
-    # def show_after_alloc(self):
-    #     self.clear_left()
-
-    #     tk.Button(
-    #         self.left,
-    #         text="➕ Add Process",
-    #         command=self.show_process_input,
-    #         bg="#3b82f6",
-    #         fg="white",
-    #         width=20
-    #     ).pack(pady=10)
-
-    #     tk.Label(
-    #         self.left,
-    #         text="Click a process to deallocate",
-    #         fg="white",
-    #         bg="#111827",
-    #         font=("Arial", 11, "bold")
-    #     ).pack(pady=10)
-
-    #     # store selected process
-    #     self.selected_process = tk.StringVar(value="")
-
-    #     # process buttons container
-    #     btn_frame = tk.Frame(self.left, bg="#111827")
-    #     btn_frame.pack(pady=5)
-
-    #     for name in self.processes.keys():
-    #         tk.Button(
-    #             btn_frame,
-    #             text=name,
-    #             width=25,
-    #             bg="#374151",
-    #             fg="white",
-    #             command=lambda n=name: self.select_process(n)
-    #         ).pack(pady=3)
-
-    #     tk.Button(
-    #         self.left,
-    #         text="🗑 Deallocate Selected",
-    #         command=self.deallocate,
-    #         bg="#ef4444",
-    #         fg="white",
-    #         width=20
-    #     ).pack(pady=15)
+    
 
     def show_after_alloc(self):
         self.clear_left()
@@ -343,64 +355,7 @@ class MemoryGUI:
 
         except Exception as e:
             messagebox.showerror("Error", str(e))
-    # def select_process(self, name):
-    #     self.selected_process.set(name)
-
-    # def allocate(self):
-    #     try:
-    #         # ===== 1. CLEAR OLD SEGMENTS =====
-    #         self.current_process.segments = []
-
-    #         # ===== 2. VALIDATE INPUT =====
-    #         for name, size in self.entries:
-    #             n = name.get().strip()
-    #             s = size.get().strip()
-
-    #             if not n:
-    #                 messagebox.showerror("Error", "Segment name cannot be empty")
-    #                 return
-
-    #             if not s.isdigit():
-    #                 messagebox.showerror("Error", f"Invalid size for segment '{n}'")
-    #                 return
-
-    #             self.current_process.segments.append(
-    #                 Segment(n, int(s), self.current_process.name)
-    #             )
-
-    #         # ===== 3. CHECK IF PROCESS FITS (ALL-OR-NOTHING) =====
-    #         if not self.can_allocate(self.current_process):
-    #             messagebox.showerror("Fail", "Process does not fit in available holes")
-    #             return
-
-    #         # ===== 4. SORT HOLES BASED ON METHOD =====
-    #         if self.method == "best":
-    #             holes = sorted(self.holes, key=lambda x: x.size)
-    #         else:  # first fit
-    #             holes = sorted(self.holes, key=lambda x: x.start)
-
-    #         # ===== 5. ACTUAL ALLOCATION =====
-    #         for seg in self.current_process.segments:
-    #             for h in holes:
-    #                 if h.size >= seg.size:
-    #                     seg.base = h.start
-    #                     h.start += seg.size
-    #                     h.size -= seg.size
-    #                     break
-
-    #         # ===== 6. REMOVE EMPTY HOLES =====
-    #         self.holes = [h for h in self.holes if h.size > 0]
-
-    #         # ===== 7. SAVE PROCESS =====
-    #         self.processes[self.current_process.name] = self.current_process
-
-    #         # ===== 8. UPDATE UI =====
-    #         self.draw_memory()
-    #         self.update_tables()
-    #         self.show_after_alloc()
-
-    #     except Exception as e:
-    #         messagebox.showerror("Error", str(e))
+    
     def allocate(self):
         try:
             # ===== 1. CLEAR OLD SEGMENTS =====
@@ -522,6 +477,3 @@ class MemoryGUI:
 root = tk.Tk()
 app = MemoryGUI(root)
 root.mainloop()
-
-
-
