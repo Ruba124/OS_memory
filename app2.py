@@ -56,12 +56,7 @@ class MemoryGUI:
 
         self.show_memory_input()
 
-    # def show_memory_input(self):
-    #     self.clear_left()
-    #     tk.Label(self.left, text="Enter Memory Size", fg="white", bg="#111827").pack(pady=10)
-    #     self.mem_entry = tk.Entry(self.left)
-    #     self.mem_entry.pack()
-    #     tk.Button(self.left, text="Next", command=self.set_memory, bg="#22c55e", fg="white").pack(pady=10)
+    
     def show_memory_input(self):
         self.clear_left()
         
@@ -75,8 +70,7 @@ class MemoryGUI:
         ).pack(pady=(50, 10)) # (50 pixels above, 10 pixels below)
 
         # 2. Input Label: To move it down towards the middle, 
-        # use a larger top value in pady. 
-        # Adjust 150 to your liking (increase for lower, decrease for higher)
+        
         tk.Label(
             self.left, 
             text="Enter Memory Size", 
@@ -107,24 +101,7 @@ class MemoryGUI:
         except:
             messagebox.showerror("Error", "Invalid memory size")
 
-    # def show_hole_input(self):
-    #     self.clear_left()
-
-    #     tk.Label(self.left, text="Add Holes", fg="white", bg="#111827", font=("Arial", 12, "bold")).pack(pady=10)
-
-    #     tk.Label(self.left, text="Start Address", fg="white", bg="#111827").pack()
-    #     self.h_start = tk.Entry(self.left)
-    #     self.h_start.pack(pady=3)
-
-    #     tk.Label(self.left, text="Hole Size", fg="white", bg="#111827").pack()
-    #     self.h_size = tk.Entry(self.left)
-    #     self.h_size.pack(pady=3)
-
-    #     tk.Button(self.left, text="➕ Add Hole", command=self.add_hole,
-    #             bg="#3b82f6", fg="white", height=2, width=20).pack(pady=8)
-
-    #     tk.Button(self.left, text="✔ Finish Holes", command=self.finish_holes,
-    #             bg="#22c55e", fg="white", height=2, width=20).pack(pady=5)
+    
     def show_hole_input(self):
         self.clear_left()
         # Push down from top
@@ -238,7 +215,7 @@ class MemoryGUI:
 
             self.entries.append((name, size))
 
-        tk.Button(self.left, text="🚀 Allocate", command=self.allocate,
+        tk.Button(self.left, text="Allocate", command=self.allocate,
                 bg="#22c55e", fg="white", height=2, width=20).pack(pady=10)
     
     
@@ -385,15 +362,14 @@ class MemoryGUI:
                 self.show_after_alloc() 
                 return
 
-            # ===== 4. SORT HOLES BASED ON METHOD =====
-            # We work on a copy of the holes to perform the actual allocation
-            if self.method == "best":
-                self.holes.sort(key=lambda x: x.size)
-            else:  # first fit
-                self.holes.sort(key=lambda x: x.start)
-
-            # ===== 5. ACTUAL ALLOCATION =====
+       
             for seg in self.current_process.segments:
+
+                if self.method == "best":
+                    self.holes.sort(key=lambda x: x.size)
+                else:
+                    self.holes.sort(key=lambda x: x.start)
+
                 for h in self.holes:
                     if h.size >= seg.size:
                         seg.base = h.start
